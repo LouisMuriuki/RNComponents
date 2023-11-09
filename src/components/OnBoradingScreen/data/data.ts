@@ -13,14 +13,14 @@ const data: OnboardingData[] = [
     id: 1,
     animation: require('../assets/animations/Lottie1.json'),
     text: 'Lorem Ipsum dolor sit amet',
-    textColor: '#005b4f',
+    textColor: '#1e2169',
     backgroundColor: '#ffa3ce',
   },
   {
     id: 2,
     animation: require('../assets//animations/Lottie2.json'),
     text: 'Lorem Ipsum dolor sit amet',
-    textColor: '#1e2169',
+    textColor: '#005b4f',
     backgroundColor: '#bae4fd',
   },
   {
