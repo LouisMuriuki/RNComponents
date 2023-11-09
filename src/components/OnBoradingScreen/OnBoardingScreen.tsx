@@ -1,9 +1,11 @@
-import {StyleSheet, View, FlatList, ViewToken,StatusBar} from 'react-native';
-import React from 'react';
+import {StyleSheet, View, FlatList, ViewToken, StatusBar} from 'react-native';
+import React, {useEffect, useState,useRef} from 'react';
+import {useWindowDimensions} from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedScrollHandler,
   useAnimatedRef,
+  interpolateColor,
 } from 'react-native-reanimated';
 import data, {OnboardingData} from './data/data';
 import Pagination from './components/Pagination';
@@ -11,6 +13,8 @@ import CustomButton from './components/CustomButton';
 import RenderItem from './components/RenderItem';
 
 const OnboardingScreen = () => {
+  const [bgColor, SetBgColor] = useState('');
+  const {width: SCREEN_WIDTH} = useWindowDimensions();
   const flatListRef = useAnimatedRef<FlatList<OnboardingData>>();
   const x = useSharedValue(0);
   const flatListIndex = useSharedValue(0);
@@ -25,15 +29,31 @@ const OnboardingScreen = () => {
     }
   };
 
+  const viewabilityConfigCallbackPairs = useRef([
+    {onViewableItemsChanged},
+  ]);
+
   const onScroll = useAnimatedScrollHandler({
     onScroll: event => {
       x.value = event.contentOffset.x;
+      console.log(event.contentOffset.x);
     },
   });
 
+  useEffect(() => {
+    const backgroundColor = interpolateColor(
+      x.value,
+      [0, SCREEN_WIDTH, 2 * SCREEN_WIDTH],
+      ['#1e2169', '#005b4f', '#F15937'],
+    );
+    SetBgColor(backgroundColor);
+  }, [x]);
+
+
+
   return (
     <>
-    
+      <StatusBar backgroundColor={bgColor} />
       <View style={styles.container}>
         <Animated.FlatList
           //@ts-expect-error
@@ -49,7 +69,10 @@ const OnboardingScreen = () => {
           bounces={false}
           pagingEnabled={true}
           showsHorizontalScrollIndicator={false}
-          onViewableItemsChanged={onViewableItemsChanged}
+        //   viewabilityConfigCallbackPairs={
+        //     viewabilityConfigCallbackPairs.current
+        //   }
+          //   onViewableItemsChanged={onViewableItemsChanged}
           viewabilityConfig={{
             minimumViewTime: 300,
             viewAreaCoveragePercentThreshold: 10,

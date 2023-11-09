@@ -22,26 +22,8 @@ type Props = {
   x: SharedValue<number>;
   item: OnboardingData;
 };
-// const CustomBar = Animated.createAnimatedComponent(StatusBar);
 
 const RenderItem = ({index, x, item}: Props) => {
-  const [bgcolor, setBgColor] = useState('');
-  useEffect(() => {
-    switch (index) {
-      case 1:
-        setBgColor('#1e2169');
-        break;
-      case 2:
-        setBgColor('#005b4f');
-        break;
-      case 3:
-        setBgColor('#F15937');
-        break;
-
-      default:
-        break;
-    }
-  }, [index]);
   const {width: SCREEN_WIDTH} = useWindowDimensions();
 
   const lottieAnimationStyle = useAnimatedStyle(() => {
@@ -78,54 +60,36 @@ const RenderItem = ({index, x, item}: Props) => {
     };
   });
 
-  const statusBarAnimation = useAnimatedProps(() => {
-    const backgroundColor = interpolateColor(
-      x.value,
-      [
-        (index - 1) * SCREEN_WIDTH,
-        index * SCREEN_WIDTH,
-        (index + 1) * SCREEN_WIDTH,
-      ],
-      ['#1e2169', '#005b4f', '#F15937'],
-    );
-    return {
-      backgroundColor: backgroundColor,
-    };
-  });
-
   return (
-    <>
-      <StatusBar backgroundColor={bgcolor} />
-      <View style={[styles.itemContainer, {width: SCREEN_WIDTH}]}>
-        <View style={styles.circleContainer}>
-          <Animated.View
-            style={[
-              {
-                width: SCREEN_WIDTH,
-                height: SCREEN_WIDTH,
-                borderRadius: SCREEN_WIDTH / 2,
-                backgroundColor: item.backgroundColor,
-              },
-              circleAnimation,
-            ]}
-          />
-        </View>
-        <Animated.View style={lottieAnimationStyle}>
-          <LottieView
-            source={item.animation}
-            style={{
-              width: SCREEN_WIDTH * 0.9,
-              height: SCREEN_WIDTH * 0.9,
-            }}
-            autoPlay
-            loop
-          />
-        </Animated.View>
-        <Text style={[styles.itemText, {color: item.textColor}]}>
-          {item.text}
-        </Text>
+    <View style={[styles.itemContainer, {width: SCREEN_WIDTH}]}>
+      <View style={styles.circleContainer}>
+        <Animated.View
+          style={[
+            {
+              width: SCREEN_WIDTH,
+              height: SCREEN_WIDTH,
+              borderRadius: SCREEN_WIDTH / 2,
+              backgroundColor: item.backgroundColor,
+            },
+            circleAnimation,
+          ]}
+        />
       </View>
-    </>
+      <Animated.View style={lottieAnimationStyle}>
+        <LottieView
+          source={item.animation}
+          style={{
+            width: SCREEN_WIDTH * 0.9,
+            height: SCREEN_WIDTH * 0.9,
+          }}
+          autoPlay
+          loop
+        />
+      </Animated.View>
+      <Text style={[styles.itemText, {color: item.textColor}]}>
+        {item.text}
+      </Text>
+    </View>
   );
 };
 
