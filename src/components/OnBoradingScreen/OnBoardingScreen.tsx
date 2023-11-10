@@ -1,5 +1,5 @@
 import {StyleSheet, View, FlatList, ViewToken, StatusBar} from 'react-native';
-import React, {useEffect, useState,useRef} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {useWindowDimensions} from 'react-native';
 import Animated, {
   useSharedValue,
@@ -19,19 +19,13 @@ const OnboardingScreen = () => {
   const x = useSharedValue(0);
   const flatListIndex = useSharedValue(0);
 
-  const onViewableItemsChanged = ({
-    viewableItems,
-  }: {
-    viewableItems: ViewToken[];
-  }) => {
-    if (viewableItems[0].index !== null) {
-      flatListIndex.value = viewableItems[0].index;
-    }
-  };
-
-  const viewabilityConfigCallbackPairs = useRef([
-    {onViewableItemsChanged},
-  ]);
+  const onViewableItemsChanged = useCallback(
+    ({viewableItems}: {viewableItems: ViewToken[]}) => {
+      if (viewableItems[0].index !== null) {
+        flatListIndex.value = viewableItems[0].index;
+      }
+    },
+    []);
 
   const onScroll = useAnimatedScrollHandler({
     onScroll: event => {
@@ -48,8 +42,6 @@ const OnboardingScreen = () => {
     );
     SetBgColor(backgroundColor);
   }, [x]);
-
-
 
   return (
     <>
@@ -69,10 +61,10 @@ const OnboardingScreen = () => {
           bounces={false}
           pagingEnabled={true}
           showsHorizontalScrollIndicator={false}
-        //   viewabilityConfigCallbackPairs={
-        //     viewabilityConfigCallbackPairs.current
-        //   }
-          //   onViewableItemsChanged={onViewableItemsChanged}
+          //   viewabilityConfigCallbackPairs={
+          //     viewabilityConfigCallbackPairs.current
+          //   }
+          onViewableItemsChanged={onViewableItemsChanged}
           viewabilityConfig={{
             minimumViewTime: 300,
             viewAreaCoveragePercentThreshold: 10,
