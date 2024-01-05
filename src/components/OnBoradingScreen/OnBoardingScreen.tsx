@@ -25,7 +25,8 @@ const OnboardingScreen = () => {
         flatListIndex.value = viewableItems[0].index;
       }
     },
-    []);
+    [],
+  );
 
   const onScroll = useAnimatedScrollHandler({
     onScroll: event => {

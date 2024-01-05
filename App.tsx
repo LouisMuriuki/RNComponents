@@ -15,7 +15,7 @@ const Navigator = () => {
 };
 
 function App(): JSX.Element {
-  return <Navigator />;
+  return <Navigator  />;
 }
 
 const styles = StyleSheet.create({
